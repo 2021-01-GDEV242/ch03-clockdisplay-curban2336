@@ -9,24 +9,25 @@
  * and reacts by incrementing the display. This is done in the usual clock
  * fashion: the hour increments when the minutes roll over to zero.
  * 
- * @author Michael Kölling and David J. Barnes
- * @version 2016.02.29
+ * @modified by Christopher Urban
+ * @version 2020.05.02
  */
 public class ClockDisplay
 {
     private NumberDisplay hours;
     private NumberDisplay minutes;
     private String displayString;    // simulates the actual display
+    private String meridian;
     
     /**
      * Constructor for ClockDisplay objects. This constructor 
-     * creates a new clock set at 00:00.
+     * creates a new clock set at 12:00 AM.
      */
     public ClockDisplay()
     {
-        hours = new NumberDisplay(24);
+        hours = new NumberDisplay(12);
         minutes = new NumberDisplay(60);
-        updateDisplay();
+        setTime(12, 00, "AM");
     }
 
     /**
@@ -34,11 +35,12 @@ public class ClockDisplay
      * creates a new clock set at the time specified by the 
      * parameters.
      */
-    public ClockDisplay(int hour, int minute)
+    public ClockDisplay(int hour, int minute, String meridian)
     {
-        hours = new NumberDisplay(24);
+        hours = new NumberDisplay(12);
         minutes = new NumberDisplay(60);
-        setTime(hour, minute);
+        this.meridian = meridian;
+        setTime(hour, minute, meridian);
     }
 
     /**
@@ -58,10 +60,11 @@ public class ClockDisplay
      * Set the time of the display to the specified hour and
      * minute.
      */
-    public void setTime(int hour, int minute)
+    public void setTime(int hour, int minute, String newMeridian)
     {
         hours.setValue(hour);
         minutes.setValue(minute);
+        meridian = newMeridian;
         updateDisplay();
     }
 
@@ -79,6 +82,6 @@ public class ClockDisplay
     private void updateDisplay()
     {
         displayString = hours.getDisplayValue() + ":" + 
-                        minutes.getDisplayValue();
+                        minutes.getDisplayValue() + meridian;
     }
 }
