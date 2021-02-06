@@ -1,8 +1,8 @@
 
 /**
  * The ClockDisplay class implements a digital clock display for a
- * European-style 24 hour clock. The clock shows hours and minutes. The 
- * range of the clock is 00:00 (midnight) to 23:59 (one minute before 
+ * 12 hour clock. The clock shows hours and minutes. The 
+ * range of the clock is 12:00 AM (midnight) to 11:59 PM(one minute before 
  * midnight).
  * 
  * The clock display receives "ticks" (via the timeTick method) every minute
@@ -25,7 +25,7 @@ public class ClockDisplay
      */
     public ClockDisplay()
     {
-        hours = new NumberDisplay(12);
+        hours = new NumberDisplay(13);
         minutes = new NumberDisplay(60);
         setTime(12, 00, "AM");
     }
@@ -35,12 +35,24 @@ public class ClockDisplay
      * creates a new clock set at the time specified by the 
      * parameters.
      */
-    public ClockDisplay(int hour, int minute, String meridian)
+    public ClockDisplay(int hour, int minute, String newMeridian)
     {
-        hours = new NumberDisplay(12);
-        minutes = new NumberDisplay(60);
-        this.meridian = meridian;
-        setTime(hour, minute, meridian);
+        if(hour>0 && hour<=12)
+        {
+            if(newMeridian.equalsIgnoreCase("AM") || newMeridian.equalsIgnoreCase("PM"))
+            {
+                hours.setValue(hour);
+                minutes.setValue(minute);
+                meridian = newMeridian;
+                updateDisplay();
+            }
+            else{
+                System.out.println("Meridian value invalid. Please use am or pm.");
+            }
+        }
+        else{
+             System.out.println("Hour value invalid. Please use a number between and including 1 to 12.");
+        }
     }
 
     /**
@@ -53,6 +65,17 @@ public class ClockDisplay
         if(minutes.getValue() == 0) {  // it just rolled over!
             hours.increment();
         }
+        if(hours.getValue() == 12){
+            if(meridian.equalsIgnoreCase("AM")){
+                meridian = "PM";
+            }
+            else{
+                meridian = "AM";
+            }
+        }
+        if(hours.getValue() == 0){
+            hours.setValue(1);
+        }
         updateDisplay();
     }
 
@@ -62,14 +85,26 @@ public class ClockDisplay
      */
     public void setTime(int hour, int minute, String newMeridian)
     {
-        hours.setValue(hour);
-        minutes.setValue(minute);
-        meridian = newMeridian;
-        updateDisplay();
+        if(hour>0 && hour<=12)
+        {
+            if(newMeridian.equalsIgnoreCase("AM") || newMeridian.equalsIgnoreCase("PM"))
+            {
+                hours.setValue(hour);
+                minutes.setValue(minute);
+                meridian = newMeridian;
+                updateDisplay();
+            }
+            else{
+                System.out.println("Meridian value invalid. Please use am or pm.");
+            }
+        }
+        else{
+             System.out.println("Hour value invalid. Please use a number between and including 1 to 12.");
+        }
     }
 
     /**
-     * Return the current time of this display in the format HH:MM.
+     * Return the current time of this display in the format HH:MM AM/PM.
      */
     public String getTime()
     {
@@ -82,6 +117,6 @@ public class ClockDisplay
     private void updateDisplay()
     {
         displayString = hours.getDisplayValue() + ":" + 
-                        minutes.getDisplayValue() + meridian;
+                        minutes.getDisplayValue() + " " + meridian.toUpperCase();
     }
 }
