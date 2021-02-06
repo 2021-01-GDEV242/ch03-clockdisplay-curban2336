@@ -37,18 +37,14 @@ public class ClockDisplay
      */
     public ClockDisplay(int hour, int minute, String newMeridian)
     {
+        hours = new NumberDisplay(13);
+        minutes = new NumberDisplay(60);
         if(hour>0 && hour<=12)
         {
-            if(newMeridian.equalsIgnoreCase("AM") || newMeridian.equalsIgnoreCase("PM"))
-            {
-                hours.setValue(hour);
-                minutes.setValue(minute);
-                meridian = newMeridian;
-                updateDisplay();
-            }
-            else{
-                System.out.println("Meridian value invalid. Please use am or pm.");
-            }
+             hours.setValue(hour);
+             minutes.setValue(minute);
+             meridian = newMeridian;
+             updateDisplay();
         }
         else{
              System.out.println("Hour value invalid. Please use a number between and including 1 to 12.");
